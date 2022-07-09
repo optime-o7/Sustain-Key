@@ -14,7 +14,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
             InitializeComponent();
             int w = Screen.PrimaryScreen.WorkingArea.Width, h = Screen.PrimaryScreen.WorkingArea.Size.Height;
             Location = new Point(w - w / 6, h / 25);
-            key = Settings1.Default.Key;
+            key = Settings.Default.Key;
             RefreshKeyLabel();
         }
 
@@ -65,8 +65,8 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
                 key = e.KeyCode.ToString();
                 binding = false;
                 RefreshKeyLabel();
-                Settings1.Default.Key = key;
-                Settings1.Default.Save();
+                Settings.Default.Key = key;
+                Settings.Default.Save();
             }
             else if (e.KeyCode.ToString() == key)
             {
