@@ -2,14 +2,14 @@ using System.Diagnostics;
 
 namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 {
-    public partial class Form1 : Form
+    public partial class Sustain_Key : Form
     {
         NotifyIcon n = new NotifyIcon();
         int sus = -1;
         bool binding = false;
         string key;
 
-        public Form1()
+        public Sustain_Key()
         {
             InitializeComponent();
             int w = Screen.PrimaryScreen.WorkingArea.Width, h = Screen.PrimaryScreen.WorkingArea.Size.Height;

@@ -1,6 +1,6 @@
 ﻿namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 {
-    partial class Form1
+    partial class Sustain_Key
     {
         /// <summary>
         ///  Required designer variable.
@@ -75,7 +75,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Form1";
+            this.Text = "Sustain Key";
             this.TopMost = true;
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.ResumeLayout(false);
