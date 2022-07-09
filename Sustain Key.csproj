@@ -19,17 +19,17 @@ Puede configurar y guardar una tecla personalizada para enviar un mensaje MIDI h
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Settings1.Designer.cs">
+    <Compile Update="Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings1.settings</DependentUpon>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Settings1.settings">
+    <None Update="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
