@@ -2,11 +2,20 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <RootNamespace>vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <FileVersion>1.0</FileVersion>
+    <PackageReleaseNotes>First Version of Sustain Key
+Puede configurar y guardar una tecla personalizada para enviar un mensaje MIDI hacia un programa (por ahora funciona con Piano Teq) para alternar el estado de cualquier pedal o acción en específico.</PackageReleaseNotes>
+    <Company></Company>
+    <Product>Sustain Key</Product>
+    <Authors>optime_o7</Authors>
+    <Version>1.0</Version>
+    <PackageId>Sustain Key</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
