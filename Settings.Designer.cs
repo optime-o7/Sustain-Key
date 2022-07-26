@@ -34,5 +34,17 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii {
                 this["Key"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutputDevice {
+            get {
+                return ((string)(this["OutputDevice"]));
+            }
+            set {
+                this["OutputDevice"] = value;
+            }
+        }
     }
 }
