@@ -15,18 +15,32 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
         public Sustain_Key()
         {
             InitializeComponent();
-            if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) lmao = OutputDevice.GetByName(Settings.Default.OutputDevice);
+            try
+            {
+                if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) lmao = OutputDevice.GetByName(Settings.Default.OutputDevice);
+            }
+            catch (ArgumentException) {}
             int w = Screen.PrimaryScreen.WorkingArea.Width, h = Screen.PrimaryScreen.WorkingArea.Size.Height;
             Location = new Point(w - w / 6, h / 25);
             key = Settings.Default.Key;
             RefreshKeyLabel();
+            RefreshDevices();
+            try
+            {
+                if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) midiOutComboBox.SelectedItem = Settings.Default.OutputDevice;
+            }
+            catch (ArgumentException){}
+        }
+
+        void RefreshDevices()
+        {
+            midiOutComboBox.Items.Clear();
             int ashei = 0;
-            while(ashei < OutputDevice.GetDevicesCount())
+            while (ashei < OutputDevice.GetDevicesCount())
             {
                 midiOutComboBox.Items.Add(OutputDevice.GetByIndex(ashei).Name);
                 ashei++;
             }
-            if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) midiOutComboBox.SelectedItem = Settings.Default.OutputDevice;
         }
 
         void ToggleSus(int a)
@@ -55,17 +69,20 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
         private void button1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (binding)
+            if (lmao != null)
             {
-                key = e.KeyCode.ToString();
-                binding = false;
-                RefreshKeyLabel();
-                Settings.Default.Key = key;
-                Settings.Default.Save();
-            }
-            else if (e.KeyCode.ToString() == key)
-            {
-                ToggleSus(sus * -1);
+                if (binding)
+                {
+                    key = e.KeyCode.ToString();
+                    binding = false;
+                    RefreshKeyLabel();
+                    Settings.Default.Key = key;
+                    Settings.Default.Save();
+                }
+                else if (e.KeyCode.ToString() == key)
+                {
+                    ToggleSus(sus * -1);
+                }
             }
         }
 
@@ -104,6 +121,11 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
         private void midiOutComboBox_DropDownClosed(object sender, EventArgs e)
         {
             button1.Focus();
+        }
+
+        private void midiOutComboBox_DropDown(object sender, EventArgs e)
+        {
+            RefreshDevices();
         }
     }
 }

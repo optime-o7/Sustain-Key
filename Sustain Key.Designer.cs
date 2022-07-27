@@ -74,6 +74,7 @@
             this.midiOutComboBox.Size = new System.Drawing.Size(151, 28);
             this.midiOutComboBox.TabIndex = 4;
             this.midiOutComboBox.Text = "No Output Device Selected";
+            this.midiOutComboBox.DropDown += new System.EventHandler(this.midiOutComboBox_DropDown);
             this.midiOutComboBox.SelectedIndexChanged += new System.EventHandler(this.midiOutComboBox_SelectedIndexChanged);
             this.midiOutComboBox.DropDownClosed += new System.EventHandler(this.midiOutComboBox_DropDownClosed);
             // 
