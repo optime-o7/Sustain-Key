@@ -24,6 +24,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
             RefreshKey();
             RefreshDevices();
+            RefreshPorts();
 
             try { if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) midiOutComboBox.SelectedItem = Settings.Default.OutputDevice; }
             catch (ArgumentException) { }
@@ -37,9 +38,6 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
                 if (Settings.Default.pedalPort != "" && SerialPort.GetPortNames().Contains(Settings.Default.pedalPort))
                 {
                     port = Settings.Default.pedalPort;
-
-                    await Task.Run(RefreshPorts);
-
                     var availablePorts = SerialPort.GetPortNames();
 
                     for (int i = 0; i < availablePorts.Length; i++)
@@ -50,11 +48,6 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
                             break;
                         }
                     }
-                }
-                if (Settings.Default.pedalOn == true && port != "")
-                {
-                    pedalCheck.Checked = true;
-                    StartPedalListening();
                 }
             }
             catch (Exception) { }
@@ -71,32 +64,57 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
             }
         }
 
-        private async Task RefreshPorts()
+        private async void RefreshPorts()
         {
-            serialPortsDrop.Items.Clear();
-            serialPortsDrop.Enabled = false;
-            refreshBtn.Enabled = false;
-            pedalCheck.Enabled = false;
-
-            foreach (var p in SerialPort.GetPortNames())
+            await Task.Run(() =>
             {
                 try
                 {
-                    var s = new SerialPort(p, 9600);
-
-                    s.Open();
-                    s.Close();
-
-                    serialPortsDrop.Items.Add(p);
+                    Invoke(() =>
+                    {
+                        serialPortsDrop.Items.Clear();
+                        serialPortsDrop.Enabled = false;
+                        refreshBtn.Enabled = false;
+                        pedalCheck.Enabled = false;
+                    });
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    serialPortsDrop.Items.Clear();
+                    serialPortsDrop.Enabled = false;
+                    refreshBtn.Enabled = false;
+                    pedalCheck.Enabled = false;
+                }
+
+                foreach (var p in SerialPort.GetPortNames())
+                {
+                    try
+                    {
+                        var s = new SerialPort(p, 9600);
+
+                        s.Open();
+                        s.Close();
+
+                        Invoke(() => serialPortsDrop.Items.Add(p));
+                    }
+                    catch (Exception) { }
+                }
+
+                Invoke(() =>
+                {
+                    serialPortsDrop.Enabled = true;
+                    refreshBtn.Enabled = true;
+                    pedalCheck.Enabled = true;
+
+                    if (port != "") serialPortsDrop.SelectedItem = port;
+                });
+            });
+
+            if (Settings.Default.pedalOn == true && port == Settings.Default.pedalPort && lmao != null)
+            {
+                pedalCheck.Checked = true;
+                StartPedalListening();
             }
-
-            serialPortsDrop.Enabled = true;
-            refreshBtn.Enabled = true;
-            pedalCheck.Enabled = true;
-
-            if (port != "") serialPortsDrop.SelectedItem = port;
         }
 
         private void ToggleSus(int a)
@@ -176,11 +194,13 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
         private async void refreshBtn_Click(object sender, EventArgs e)
         {
             button1.Focus();
-            await RefreshPorts();
+            RefreshPorts();
         }
 
         private void serialPortsDrop_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (pedalCheck.Checked) pedalCheck.Checked = false;
+
             port = serialPortsDrop.SelectedItem.ToString();
             Settings.Default.pedalPort = port;
             Settings.Default.Save();
@@ -188,31 +208,35 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
         private Task PedalListen()
         {
-            pedalPort.Open();
-
-            while (pedalCheck.Checked && pedalPort.IsOpen)
+            try
             {
-                bool on = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
+                pedalPort.Open();
 
-                if (on)
+                while (pedalCheck.Checked && pedalPort.IsOpen)
                 {
-                    ToggleSus(1);
+                    bool on = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
 
-                    while (true)
+                    if (on)
                     {
-                        on = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
+                        ToggleSus(1);
 
-                        if (!on)
+                        while (true)
                         {
-                            ToggleSus(-1);
-                            break;
+                            on = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
+
+                            if (!on)
+                            {
+                                ToggleSus(-1);
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if (pedalPort.IsOpen) pedalPort.Close();
-            return null;
+                if (pedalPort.IsOpen) pedalPort.Close();
+            } catch (OperationCanceledException) {}
+
+            return new Task(() => { });
         }
 
         private bool ToBool(string str)
@@ -228,8 +252,9 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
         private async void StartPedalListening()
         {
-            if (pedalPort == null || (port != "" && !pedalPort.IsOpen))
+            if (pedalPort == null || port != "")
             {
+                if (pedalPort != null && pedalPort.IsOpen) pedalPort.Close();
                 pedalPort = new(port, 9600);
 
                 await Task.Run(PedalListen);
@@ -247,7 +272,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
             bool save = false;
 
-            if (pedalCheck.Checked && port != "")
+            if (pedalCheck.Checked && port != "" && lmao != null)
             {
                 StartPedalListening();
                 save = true;

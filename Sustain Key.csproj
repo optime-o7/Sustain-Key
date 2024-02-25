@@ -14,7 +14,7 @@ Puede configurar y guardar una tecla personalizada para enviar un mensaje MIDI h
     <Company></Company>
     <Product>Sustain Key</Product>
     <Authors>optime_o7</Authors>
-    <Version>1.1</Version>
+    <Version>1.2</Version>
     <PackageId>Sustain Key</PackageId>
   </PropertyGroup>
 
