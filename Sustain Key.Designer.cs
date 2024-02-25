@@ -34,12 +34,13 @@
             midiOutComboBox = new ComboBox();
             label1 = new Label();
             pedalCheck = new CheckBox();
-            debugLbl = new Label();
+            serialPortsDrop = new ComboBox();
+            refreshBtn = new Button();
             SuspendLayout();
             // 
             // stateOfSus
             // 
-            stateOfSus.Location = new Point(2, 139);
+            stateOfSus.Location = new Point(2, 116);
             stateOfSus.Name = "stateOfSus";
             stateOfSus.Size = new Size(237, 15);
             stateOfSus.TabIndex = 0;
@@ -62,7 +63,7 @@
             // 
             // keyBinded
             // 
-            keyBinded.Location = new Point(2, 98);
+            keyBinded.Location = new Point(2, 81);
             keyBinded.Name = "keyBinded";
             keyBinded.Size = new Size(237, 19);
             keyBinded.TabIndex = 3;
@@ -80,7 +81,7 @@
             midiOutComboBox.Text = "No Output Device Selected";
             midiOutComboBox.DropDown += midiOutComboBox_DropDown;
             midiOutComboBox.SelectedIndexChanged += midiOutComboBox_SelectedIndexChanged;
-            midiOutComboBox.DropDownClosed += midiOutComboBox_DropDownClosed;
+            midiOutComboBox.DropDownClosed += DropDownClosed;
             // 
             // label1
             // 
@@ -94,22 +95,41 @@
             // pedalCheck
             // 
             pedalCheck.AutoSize = true;
-            pedalCheck.Location = new Point(90, 167);
+            pedalCheck.Location = new Point(90, 182);
             pedalCheck.Name = "pedalCheck";
             pedalCheck.Size = new Size(55, 19);
             pedalCheck.TabIndex = 6;
             pedalCheck.Text = "Pedal";
             pedalCheck.TextAlign = ContentAlignment.MiddleCenter;
             pedalCheck.UseVisualStyleBackColor = true;
-            pedalCheck.CheckedChanged += checkBox1_CheckedChanged;
+            pedalCheck.Click += pedalCheck_Click;
             // 
-            // debugLbl
+            // serialPortsDrop
             // 
-            debugLbl.Location = new Point(2, 189);
-            debugLbl.Name = "debugLbl";
-            debugLbl.Size = new Size(237, 15);
-            debugLbl.TabIndex = 0;
-            debugLbl.TextAlign = ContentAlignment.MiddleCenter;
+            serialPortsDrop.FormattingEnabled = true;
+            serialPortsDrop.Location = new Point(54, 154);
+            serialPortsDrop.Margin = new Padding(3, 2, 3, 2);
+            serialPortsDrop.Name = "serialPortsDrop";
+            serialPortsDrop.Size = new Size(133, 23);
+            serialPortsDrop.TabIndex = 4;
+            serialPortsDrop.Text = "No Output Device Selected";
+            serialPortsDrop.SelectedIndexChanged += serialPortsDrop_SelectedIndexChanged;
+            serialPortsDrop.DropDownClosed += DropDownClosed;
+            // 
+            // refreshBtn
+            // 
+            refreshBtn.FlatAppearance.BorderSize = 0;
+            refreshBtn.FlatStyle = FlatStyle.Flat;
+            refreshBtn.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            refreshBtn.Location = new Point(191, 154);
+            refreshBtn.Margin = new Padding(3, 2, 3, 2);
+            refreshBtn.Name = "refreshBtn";
+            refreshBtn.Size = new Size(25, 25);
+            refreshBtn.TabIndex = 2;
+            refreshBtn.Text = "🔄️";
+            refreshBtn.TextAlign = ContentAlignment.TopCenter;
+            refreshBtn.UseVisualStyleBackColor = true;
+            refreshBtn.Click += refreshBtn_Click;
             // 
             // Sustain_Key
             // 
@@ -118,10 +138,11 @@
             ClientSize = new Size(242, 208);
             Controls.Add(pedalCheck);
             Controls.Add(label1);
+            Controls.Add(serialPortsDrop);
             Controls.Add(midiOutComboBox);
             Controls.Add(keyBinded);
+            Controls.Add(refreshBtn);
             Controls.Add(button1);
-            Controls.Add(debugLbl);
             Controls.Add(stateOfSus);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(3, 2, 3, 2);
@@ -144,6 +165,7 @@
         private ComboBox midiOutComboBox;
         private Label label1;
         private CheckBox pedalCheck;
-        private Label debugLbl;
+        private ComboBox serialPortsDrop;
+        private Button refreshBtn;
     }
 }
