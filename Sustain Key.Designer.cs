@@ -28,85 +28,112 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.stateOfSus = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.keyBinded = new System.Windows.Forms.Label();
-            this.midiOutComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            stateOfSus = new Label();
+            button1 = new Button();
+            keyBinded = new Label();
+            midiOutComboBox = new ComboBox();
+            label1 = new Label();
+            pedalCheck = new CheckBox();
+            debugLbl = new Label();
+            SuspendLayout();
             // 
             // stateOfSus
             // 
-            this.stateOfSus.Location = new System.Drawing.Point(2, 185);
-            this.stateOfSus.Name = "stateOfSus";
-            this.stateOfSus.Size = new System.Drawing.Size(271, 20);
-            this.stateOfSus.TabIndex = 0;
-            this.stateOfSus.Text = "Estado: Desactivado";
-            this.stateOfSus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            stateOfSus.Location = new Point(2, 139);
+            stateOfSus.Name = "stateOfSus";
+            stateOfSus.Size = new Size(237, 15);
+            stateOfSus.TabIndex = 0;
+            stateOfSus.Text = "Estado: Desactivado";
+            stateOfSus.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // button1
             // 
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(27, 76);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(220, 29);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Toca para configurar una tecla";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.button1_KeyDown);
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(24, 57);
+            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(192, 22);
+            button1.TabIndex = 2;
+            button1.Text = "Toca para configurar una tecla";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            button1.KeyDown += button1_KeyDown;
             // 
             // keyBinded
             // 
-            this.keyBinded.Location = new System.Drawing.Point(2, 131);
-            this.keyBinded.Name = "keyBinded";
-            this.keyBinded.Size = new System.Drawing.Size(271, 25);
-            this.keyBinded.TabIndex = 3;
-            this.keyBinded.Text = "Tecla configurada: ";
-            this.keyBinded.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            keyBinded.Location = new Point(2, 98);
+            keyBinded.Name = "keyBinded";
+            keyBinded.Size = new Size(237, 19);
+            keyBinded.TabIndex = 3;
+            keyBinded.Text = "Tecla configurada: ";
+            keyBinded.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // midiOutComboBox
             // 
-            this.midiOutComboBox.FormattingEnabled = true;
-            this.midiOutComboBox.Location = new System.Drawing.Point(62, 42);
-            this.midiOutComboBox.Name = "midiOutComboBox";
-            this.midiOutComboBox.Size = new System.Drawing.Size(151, 28);
-            this.midiOutComboBox.TabIndex = 4;
-            this.midiOutComboBox.Text = "No Output Device Selected";
-            this.midiOutComboBox.DropDown += new System.EventHandler(this.midiOutComboBox_DropDown);
-            this.midiOutComboBox.SelectedIndexChanged += new System.EventHandler(this.midiOutComboBox_SelectedIndexChanged);
-            this.midiOutComboBox.DropDownClosed += new System.EventHandler(this.midiOutComboBox_DropDownClosed);
+            midiOutComboBox.FormattingEnabled = true;
+            midiOutComboBox.Location = new Point(54, 32);
+            midiOutComboBox.Margin = new Padding(3, 2, 3, 2);
+            midiOutComboBox.Name = "midiOutComboBox";
+            midiOutComboBox.Size = new Size(133, 23);
+            midiOutComboBox.TabIndex = 4;
+            midiOutComboBox.Text = "No Output Device Selected";
+            midiOutComboBox.DropDown += midiOutComboBox_DropDown;
+            midiOutComboBox.SelectedIndexChanged += midiOutComboBox_SelectedIndexChanged;
+            midiOutComboBox.DropDownClosed += midiOutComboBox_DropDownClosed;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(90, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Salida MIDI";
+            label1.AutoSize = true;
+            label1.Location = new Point(79, 7);
+            label1.Name = "label1";
+            label1.Size = new Size(66, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Salida MIDI";
+            // 
+            // pedalCheck
+            // 
+            pedalCheck.AutoSize = true;
+            pedalCheck.Location = new Point(90, 167);
+            pedalCheck.Name = "pedalCheck";
+            pedalCheck.Size = new Size(55, 19);
+            pedalCheck.TabIndex = 6;
+            pedalCheck.Text = "Pedal";
+            pedalCheck.TextAlign = ContentAlignment.MiddleCenter;
+            pedalCheck.UseVisualStyleBackColor = true;
+            pedalCheck.CheckedChanged += checkBox1_CheckedChanged;
+            // 
+            // debugLbl
+            // 
+            debugLbl.Location = new Point(2, 189);
+            debugLbl.Name = "debugLbl";
+            debugLbl.Size = new Size(237, 15);
+            debugLbl.TabIndex = 0;
+            debugLbl.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // Sustain_Key
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(277, 239);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.midiOutComboBox);
-            this.Controls.Add(this.keyBinded);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.stateOfSus);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "Sustain_Key";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Sustain Key";
-            this.TopMost = true;
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Sustain_Key_MouseDown);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(242, 208);
+            Controls.Add(pedalCheck);
+            Controls.Add(label1);
+            Controls.Add(midiOutComboBox);
+            Controls.Add(keyBinded);
+            Controls.Add(button1);
+            Controls.Add(debugLbl);
+            Controls.Add(stateOfSus);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "Sustain_Key";
+            StartPosition = FormStartPosition.Manual;
+            Text = "Sustain Key";
+            TopMost = true;
+            FormClosing += Sustain_Key_FormClosing;
+            MouseDown += Sustain_Key_MouseDown;
+            Resize += Form1_Resize;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -116,5 +143,7 @@
         private Label keyBinded;
         private ComboBox midiOutComboBox;
         private Label label1;
+        private CheckBox pedalCheck;
+        private Label debugLbl;
     }
 }

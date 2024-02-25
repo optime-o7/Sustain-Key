@@ -1,14 +1,17 @@
 using System.Diagnostics;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
+using System.IO.Ports;
+using Microsoft.VisualBasic;
 
 namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 {
     public partial class Sustain_Key : Form
     {
+        SerialPort pedalPort = new("COM7", 9600);
         OutputDevice lmao;
         NotifyIcon n = new NotifyIcon();
-        int sus = -1;
+        int pressState = -1;
         bool binding = false;
         string key;
 
@@ -19,7 +22,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
             {
                 if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) lmao = OutputDevice.GetByName(Settings.Default.OutputDevice);
             }
-            catch (ArgumentException) {}
+            catch (ArgumentException) { }
             int w = Screen.PrimaryScreen.WorkingArea.Width, h = Screen.PrimaryScreen.WorkingArea.Size.Height;
             Location = new Point(w - w / 6, h / 25);
             key = Settings.Default.Key;
@@ -29,7 +32,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
             {
                 if (Settings.Default.OutputDevice != "" && OutputDevice.GetByName(Settings.Default.OutputDevice) != null) midiOutComboBox.SelectedItem = Settings.Default.OutputDevice;
             }
-            catch (ArgumentException){}
+            catch (ArgumentException) { }
         }
 
         void RefreshDevices()
@@ -45,17 +48,22 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
 
         void ToggleSus(int a)
         {
-            if (a == 1) stateOfSus.Text = "Estado: Activado";
-            else if (a == -1) stateOfSus.Text = "Estado: Desactivado";
-            NoteOnEvent ojo = new NoteOnEvent((Melanchall.DryWetMidi.Common.SevenBitNumber)1, (Melanchall.DryWetMidi.Common.SevenBitNumber)1);
+            NoteOnEvent ojo;
+            if (a == 1)
+            {
+                Invoke(() => stateOfSus.Text = "Estado: Activado");
+                ojo = new((Melanchall.DryWetMidi.Common.SevenBitNumber)1, (Melanchall.DryWetMidi.Common.SevenBitNumber)2);
+            }
+            else
+            {
+                Invoke(() => stateOfSus.Text = "Estado: Desactivado");
+                ojo = new((Melanchall.DryWetMidi.Common.SevenBitNumber)1, (Melanchall.DryWetMidi.Common.SevenBitNumber)1);
+            }
             lmao.SendEvent(ojo);
-            sus *= -1;
+            pressState = a;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            binding = true;
-        }
+        private void button1_Click(object sender, EventArgs e) => binding = true;
 
         void RefreshKeyLabel()
         {
@@ -79,10 +87,7 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
                     Settings.Default.Key = key;
                     Settings.Default.Save();
                 }
-                else if (e.KeyCode.ToString() == key)
-                {
-                    ToggleSus(sus * -1);
-                }
+                else if (e.KeyCode.ToString() == key) ToggleSus(pressState * -1);
             }
         }
 
@@ -113,19 +118,73 @@ namespace vamo_a_intentar_mandar_midi_a_traves_de_una_tecla_asheiii
             button1.Focus();
         }
 
-        private void Sustain_Key_MouseDown(object sender, MouseEventArgs e)
+        private void Sustain_Key_MouseDown(object sender, MouseEventArgs e) => button1.Focus();
+
+        private void midiOutComboBox_DropDownClosed(object sender, EventArgs e) => button1.Focus();
+
+        private void midiOutComboBox_DropDown(object sender, EventArgs e) => RefreshDevices();
+
+        private Task PedalListen()
         {
-            button1.Focus();
+            int check = 0, onesQuantity = 4;
+            pedalPort.Open();
+
+            while (pedalCheck.Checked && pedalPort.IsOpen)
+            {
+                bool state = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
+
+                if (state == false) check = 0;
+                else check++;
+
+                if (check == onesQuantity)
+                {
+                    ToggleSus(1);
+
+                    check = 0;
+                    int offCheck = 0;
+                    bool flagged = false;
+
+                    while (true)
+                    {
+                        state = ToBool(pedalPort.ReadLine().ReplaceLineEndings(""));
+
+                        if (!state)
+                        {
+                            offCheck++;
+                            flagged = false;
+                        }
+                        else if (flagged) offCheck = 0;
+                        else flagged = true;
+
+                        if (offCheck == 2)
+                        {
+                            ToggleSus(-1);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (pedalPort.IsOpen) pedalPort.Close();
+            return null;
         }
 
-        private void midiOutComboBox_DropDownClosed(object sender, EventArgs e)
+        private bool ToBool(string str)
         {
-            button1.Focus();
+            switch (str)
+            {
+                case "0": return false;
+                case "1": return true;
+            }
+
+            return false;
         }
 
-        private void midiOutComboBox_DropDown(object sender, EventArgs e)
+        private async void checkBox1_CheckedChanged(object sender, EventArgs e) { if (pedalCheck.Checked) await Task.Run(PedalListen); }
+
+        private void Sustain_Key_FormClosing(object sender, FormClosingEventArgs e)
         {
-            RefreshDevices();
+            if (pedalPort.IsOpen) pedalPort.Close();
         }
     }
 }
